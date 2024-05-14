@@ -16,6 +16,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.satwik.nexgenius.core.naviagtion.model.Graph
 import com.satwik.nexgenius.core.naviagtion.model.Screen
+import kotlinx.coroutines.delay
 
 @Composable
 fun HomeScreen(
@@ -35,7 +36,7 @@ internal fun Content(viewModel: HomescreenViewmodel, navController: NavControlle
     Box(
         modifier = Modifier.fillMaxSize()
     ){
-        Text(text = "${Firebase.auth.currentUser!!.email}", modifier = Modifier.align(Alignment.TopCenter))
+        Text(text = "Home", modifier = Modifier.align(Alignment.TopCenter))
 
         Button(
             modifier = Modifier.align(Alignment.Center),

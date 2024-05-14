@@ -1,10 +1,14 @@
 package com.satwik.nexgenius.features.auth.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.firestore.CollectionReference
 import com.satwik.nexgenius.core.common.User
 import com.satwik.nexgenius.features.auth.domain.repository.AuthRepository
 import kotlinx.coroutines.tasks.await
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -34,3 +38,4 @@ class AuthRepositoryImpl @Inject constructor(
         firebaseAuth.signOut()
     }
 }
+
