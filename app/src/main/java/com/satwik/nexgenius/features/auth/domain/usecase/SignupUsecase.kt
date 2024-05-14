@@ -9,7 +9,11 @@ class SignupUsecase @Inject constructor(private val repository: AuthRepository) 
     operator fun invoke(email:String, password:String, username:String) = flow{
         emit(Resource.Loading())
         try{
-            emit(Resource.Success(repository.signup(email, password, username)))
+            emit(Resource.Success(repository.signup(
+                username = username,
+                email = email,
+                password = password
+            )))
         }
         catch (e:Exception){
             emit(Resource.Error(e.message?:"Something went wrong"))

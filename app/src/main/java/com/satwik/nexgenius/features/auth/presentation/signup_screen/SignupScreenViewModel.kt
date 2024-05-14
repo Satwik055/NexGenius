@@ -21,7 +21,7 @@ class SignupScreenViewModel @Inject constructor(
     val emailAuthState: State<AuthenticationState> = _emailAuthState
 
     fun signup(email:String, password:String, username:String){
-        signupUseCase(email, password, username).onEach {result->
+        signupUseCase(email = email, password = password, username = username).onEach { result->
             when(result){
                 is Resource.Error -> _emailAuthState.value = AuthenticationState(error = result.message.toString())
                 is Resource.Loading -> _emailAuthState.value = AuthenticationState(isLoading = true)
