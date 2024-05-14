@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "334872309239",
+    "project_id": "nexgenius-42fd9",
+    "storage_bucket": "nexgenius-42fd9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:334872309239:android:166d24bcf2b545f1a792f2",
+        "android_client_info": {
+          "package_name": "com.satwik.nexgenius"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_zXLwhIksDR7V2z1p3wNhfeK_6T2Ie-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
