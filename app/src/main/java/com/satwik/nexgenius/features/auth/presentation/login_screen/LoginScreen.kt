@@ -1,7 +1,12 @@
 package com.satwik.nexgenius.features.auth.presentation.login_screen
 
+import android.Manifest
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -33,11 +38,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.satwik.nexgenius.core.main.MainViewModel
 import com.satwik.nexgenius.core.naviagtion.model.Graph
 import com.satwik.nexgenius.core.naviagtion.model.Screen
 import com.satwik.nexgenius.features.auth.presentation.state.AuthenticationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun LoginScreen(
     navController: NavController,
@@ -67,8 +74,10 @@ fun LoginScreen(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 internal fun Content(viewModel: LoginScreenViewModel, navController: NavController, emailAuthState:AuthenticationState) {
+
     Column(
         modifier = Modifier
             .background(color = Color(0xFFD3D1D1))
@@ -133,5 +142,4 @@ internal fun Content(viewModel: LoginScreenViewModel, navController: NavControll
                 .align(Alignment.CenterHorizontally)
         )
     }
-
 }
